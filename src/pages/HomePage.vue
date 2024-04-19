@@ -1,0 +1,71 @@
+<script setup>
+import { computed, onMounted } from 'vue';
+import Pop from '../utils/Pop.js';
+import { postsService } from '../services/PostsService.js';
+import { AppState } from '../AppState.js';
+import PostCard from '../components/PostCard.vue';
+import BonusCard from '../components/BonusCard.vue';
+
+const userPosts = computed(() => AppState.posts)
+const bonusContent = computed(() => AppState.bonuses)
+
+onMounted(() => getPosts())
+onMounted(() => getBonuses())
+
+async function getPosts() {
+  try {
+    await postsService.getPosts()
+  }
+  catch (error) {
+    Pop.error(error);
+  }
+}
+
+async function getBonuses() {
+  try {
+    await postsService.getBonuses()
+  } catch (error) {
+    Pop.error(error)
+  }
+}
+</script>
+
+<template>
+  <section class="container">
+    <div class="row">
+      <div class="col-3">
+
+      </div>
+
+      <div class="col-6">
+        <PostCard v-for="post in userPosts" :key="post.creatorId" :post="post" />
+      </div>
+
+      <div class="col-3">
+        <BonusCard v-for="bonus in bonusContent" :key="bonus.title" :bonus="bonus" />
+      </div>
+    </div>
+  </section>
+</template>
+
+<style scoped lang="scss">
+.home {
+  display: grid;
+  height: 80vh;
+  place-content: center;
+  text-align: center;
+  user-select: none;
+
+  .home-card {
+    width: clamp(500px, 50vw, 100%);
+
+    >img {
+      height: 200px;
+      max-width: 200px;
+      width: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+  }
+}
+</style>
