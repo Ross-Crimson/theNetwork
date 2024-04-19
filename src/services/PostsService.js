@@ -8,6 +8,13 @@ import { api } from "./AxiosService.js"
 
 
 class PostsService {
+    async createPost(postData) {
+        const response = await api.post('api/posts', postData)
+        console.log('new post', response.data)
+        const newPost = new Post(response.data)
+        AppState.posts.unshift(newPost)
+    }
+
     async changeSearchPage(url) {
         const response = await api.get(url)
         const newPosts = response.data.posts.map(post => new Post(post))

@@ -6,9 +6,11 @@ import Pop from '../utils/Pop.js';
 import { postsService } from '../services/PostsService.js';
 import BonusCard from '../components/BonusCard.vue';
 import PostCard from '../components/PostCard.vue';
+import NewPostCard from '../components/NewPostCard.vue';
 
 const route = useRoute()
 const profile = computed(() => AppState.activeProfile)
+const account = computed(() => AppState.account)
 const posts = computed(() => AppState.posts)
 const bonusContent = computed(() => AppState.bonuses)
 
@@ -86,10 +88,15 @@ async function changeSearchPage(pageNum) {
                 </div>
                 <div class="row p-3">
                     <p class="">{{ profile.bio }}</p>
-                    <div v-if="AppState.account?.id == profile?.id" class="text-end">
+                    <div v-if="account?.id == profile?.id" class="text-end">
                         <button class="btn btn-info">Edit</button>
                     </div>
                 </div>
+
+                <div v-if="account?.id == profile?.id">
+                    <NewPostCard />
+                </div>
+
                 <div v-if="posts">
                     <PostCard v-for="post in posts" :key="post.id" :post="post" />
 

@@ -5,6 +5,7 @@ import { postsService } from '../services/PostsService.js';
 import { AppState } from '../AppState.js';
 import PostCard from '../components/PostCard.vue';
 import BonusCard from '../components/BonusCard.vue';
+import NewPostCard from '../components/NewPostCard.vue';
 
 const userPosts = computed(() => AppState.posts)
 const bonusContent = computed(() => AppState.bonuses)
@@ -47,8 +48,13 @@ async function changeSearchPage(pageNum) {
       </div>
 
       <div class="col-6">
+        <div>
+          <NewPostCard />
+        </div>
+
         <PostCard v-for="post in userPosts" :key="post.id" :post="post" />
 
+        <!-- Note change page buttons -->
         <div class="d-flex justify-content-between p-3">
           <button :disabled="AppState.currentPage == 1" class="btn btn-primary w-25 text-center"
             @click="changeSearchPage(AppState.currentPage - 1)">Previous</button>
