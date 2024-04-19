@@ -5,17 +5,21 @@ import { AppState } from '../AppState.js';
 import Pop from '../utils/Pop.js';
 import { postsService } from '../services/PostsService.js';
 import BonusCard from '../components/BonusCard.vue';
+import PostCard from '../components/PostCard.vue';
 
 const route = useRoute()
 const profile = computed(() => AppState.activeProfile)
+const posts = computed(() => AppState.posts)
 const bonusContent = computed(() => AppState.bonuses)
 
 onMounted(() => getProfileById())
+//onMounted(() => getProfileBlogPosts())
 onMounted(() => getBonuses())
 
 async function getProfileById() {
     try {
         await postsService.getProfileById(route.params.profileId)
+        await getProfileBlogPosts()
     } catch (error) {
         Pop.error(error)
     }
@@ -25,6 +29,24 @@ async function getBonuses() {
         await postsService.getBonuses()
     } catch (error) {
         Pop.error(error)
+    }
+}
+async function getProfileBlogPosts() {
+    try {
+        await postsService.getProfilePosts(route.params.profileId)
+    }
+    catch (error) {
+        Pop.error(error);
+    }
+}
+
+async function changeSearchPage(pageNum) {
+    try {
+        console.log(pageNum)
+        await postsService.changeSearchPage(`api/profiles/${route.params.profileId}/posts?page=${pageNum}`)
+    }
+    catch (error) {
+        Pop.error(error);
     }
 }
 
@@ -64,8 +86,22 @@ async function getBonuses() {
                 </div>
                 <div class="row p-3">
                     <p class="">{{ profile.bio }}</p>
-                    <div v-if="AppState.account.id == profile.id" class="text-end">
+                    <div v-if="AppState.account?.id == profile?.id" class="text-end">
                         <button class="btn btn-info">Edit</button>
+                    </div>
+                </div>
+                <div v-if="posts">
+                    <PostCard v-for="post in posts" :key="post.id" :post="post" />
+
+                    <!-- Note change Page buttons -->
+                    <div class="d-flex justify-content-between p-3">
+                        <button :disabled="AppState.currentPage == 1" class="btn btn-primary w-25 text-center"
+                            @click="changeSearchPage(AppState.currentPage - 1)">Previous</button>
+
+                        <h4>{{ AppState.currentPage }}</h4>
+
+                        <button :disabled="AppState.currentPage == AppState.totalPages" class="btn btn-primary w-25"
+                            @click="changeSearchPage(AppState.currentPage + 1)">Next</button>
                     </div>
                 </div>
             </div>

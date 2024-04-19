@@ -18,5 +18,9 @@ export const AppState = reactive({
   bonuses: [],
 
   /** @type {Profile} */
-  activeProfile: null
+  activeProfile: null,
+
+  currentPage: 1,
+
+  totalPages: Infinity
 })

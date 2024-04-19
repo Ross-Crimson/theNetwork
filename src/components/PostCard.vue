@@ -24,6 +24,9 @@ defineProps({ post: { type: Post, required: true } })
             <div>
                 {{ post.body }}
             </div>
+            <div class="text-center pt-3 pb-1">
+                <img :src="post.imgUrl" alt="" class="postPicture">
+            </div>
         </div>
         <div class="row pt-3 justify-content-end">
             <div class="col-2">
@@ -46,5 +49,10 @@ defineProps({ post: { type: Post, required: true } })
         object-fit: cover;
         object-position: center
     }
+}
+
+.postPicture {
+    max-width: 300px;
+    height: auto;
 }
 </style>

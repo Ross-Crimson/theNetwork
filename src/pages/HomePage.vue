@@ -28,6 +28,15 @@ async function getBonuses() {
     Pop.error(error)
   }
 }
+
+async function changeSearchPage(pageNum) {
+  try {
+    await postsService.changeSearchPage(`api/posts?page=${pageNum}`)
+  }
+  catch (error) {
+    Pop.error(error);
+  }
+}
 </script>
 
 <template>
@@ -38,7 +47,17 @@ async function getBonuses() {
       </div>
 
       <div class="col-6">
-        <PostCard v-for="post in userPosts" :key="post.creatorId" :post="post" />
+        <PostCard v-for="post in userPosts" :key="post.id" :post="post" />
+
+        <div class="d-flex justify-content-between p-3">
+          <button :disabled="AppState.currentPage == 1" class="btn btn-primary w-25 text-center"
+            @click="changeSearchPage(AppState.currentPage - 1)">Previous</button>
+
+          <h4>{{ AppState.currentPage }}</h4>
+
+          <button :disabled="AppState.currentPage == AppState.totalPages" class="btn btn-primary w-25"
+            @click="changeSearchPage(AppState.currentPage + 1)">Next</button>
+        </div>
       </div>
 
       <div class="col-3">
