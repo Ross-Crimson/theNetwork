@@ -22,5 +22,7 @@ export const AppState = reactive({
 
   currentPage: 1,
 
-  totalPages: Infinity
+  totalPages: Infinity,
+
+  searchTerm: ''
 })

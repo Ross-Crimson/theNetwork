@@ -8,6 +8,25 @@ import { api } from "./AxiosService.js"
 
 
 class PostsService {
+    async likePost(postId) {
+        const response = await api.post(`api/posts/${postId}/like`)
+
+        const updatedPost = new Post(response.data)
+        console.log(updatedPost)
+        const posts = AppState.posts
+        const postIndex = posts.findIndex(post => post.id == postId)
+
+        if (postIndex == -1) throw new Error("Post wasn't updated")
+
+        posts.splice(postIndex, 1, updatedPost)
+    }
+    async destroyPost(postId) {
+        const response = await api.delete(`api/posts/${postId}`)
+        const posts = AppState.posts
+        const postIndex = posts.findIndex(post => post.id == postId)
+        if (postIndex == -1) throw new Error("Post wasn't deleted, couldn't be found")
+        posts.splice(postIndex, 1)
+    }
     async createPost(postData) {
         const response = await api.post('api/posts', postData)
         console.log('new post', response.data)
