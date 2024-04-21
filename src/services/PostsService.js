@@ -8,6 +8,24 @@ import { api } from "./AxiosService.js"
 
 
 class PostsService {
+    async clearSearch() {
+        AppState.searchTerm = ''
+        await this.getPosts()
+    }
+
+    async clearSearchOnProfilePage(profileId) {
+        AppState.searchTerm = ''
+        await this.getProfilePosts(profileId)
+    }
+    async searchPosts(searchQuery) {
+        const response = await api.get(`api/posts?query=${searchQuery}`)
+        const posts = response.data.posts.map(post => new Post(post))
+        AppState.searchTerm = searchQuery
+        AppState.posts = posts
+        AppState.currentPage = response.data.page
+        AppState.totalPages = response.data.totalPages
+    }
+
     async likePost(postId) {
         const response = await api.post(`api/posts/${postId}/like`)
 
@@ -38,10 +56,10 @@ class PostsService {
         const response = await api.get(url)
         const newPosts = response.data.posts.map(post => new Post(post))
         AppState.posts = newPosts
-        console.log(response.data)
+        //console.log(response.data)
         AppState.currentPage = response.data.page
         AppState.totalPages = response.data.totalPages
-        console.log(AppState.currentPage, ' ', AppState.totalPages)
+        //console.log(AppState.currentPage, ' ', AppState.totalPages)
     }
 
     async getProfileById(profileId) {
@@ -57,17 +75,17 @@ class PostsService {
         const response = await api.get(`api/profiles/${profileId}/posts`)
         const profilePosts = response.data.posts.map(post => new Post(post))
         AppState.posts = profilePosts
-        console.log(response.data)
+        //console.log(response.data)
         AppState.currentPage = response.data.page
         AppState.totalPages = response.data.totalPages
-        console.log(AppState.currentPage, ' ', AppState.totalPages)
+        //console.log(AppState.currentPage, ' ', AppState.totalPages)
     }
 
     async getPosts() {
         AppState.posts = []
         const response = await api.get('api/posts')
         const newPosts = response.data.posts.map(post => new Post(post))
-        console.log(response.data.posts)
+        //console.log(response.data.posts)
         AppState.posts = newPosts
 
         AppState.currentPage = response.data.page

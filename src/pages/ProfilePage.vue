@@ -7,12 +7,14 @@ import { postsService } from '../services/PostsService.js';
 import BonusCard from '../components/BonusCard.vue';
 import PostCard from '../components/PostCard.vue';
 import NewPostCard from '../components/NewPostCard.vue';
+import SearchBar from '../components/SearchBar.vue';
 
 const route = useRoute()
 const profile = computed(() => AppState.activeProfile)
 const account = computed(() => AppState.account)
 const posts = computed(() => AppState.posts)
 const bonusContent = computed(() => AppState.bonuses)
+const searchTerm = computed(() => AppState.searchTerm)
 
 onMounted(() => getProfileById())
 //onMounted(() => getProfileBlogPosts())
@@ -52,6 +54,14 @@ async function changeSearchPage(pageNum) {
     }
 }
 
+async function clearSearch() {
+    try {
+        await postsService.clearSearchOnProfilePage(route.params.profileId)
+    }
+    catch (error) {
+        Pop.error(error);
+    }
+}
 
 </script>
 
@@ -89,10 +99,18 @@ async function changeSearchPage(pageNum) {
                 <div class="row p-3">
                     <p class="">{{ profile.bio }}</p>
                     <div v-if="account?.id == profile?.id" class="text-end">
-                        <button class="btn btn-info">Edit</button>
+                        <router-link :to="{ name: 'Account' }">
+                            <button class="btn btn-info">Edit</button>
+                        </router-link>
                     </div>
                 </div>
-
+                <div>
+                    <SearchBar />
+                    <div v-if="searchTerm" class="mt-3 d-flex align-items-center">
+                        <button class="btn btn-warning " @click="clearSearch()">Clear Search</button>
+                        <div class="text-break px-2 mx-2 text-info border border-dark rounded">{{ searchTerm }}</div>
+                    </div>
+                </div>
                 <div v-if="account?.id == profile?.id">
                     <NewPostCard />
                 </div>

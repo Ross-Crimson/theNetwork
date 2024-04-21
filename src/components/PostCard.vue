@@ -77,7 +77,7 @@ async function likePost(postId) {
 
                 </div>
                 <div v-else>
-                    <i class="mdi mdi-heart"></i>{{ post.likeIds.length }}
+                    <i class="mdi mdi-heart-outline"></i>{{ post.likeIds.length }}
                 </div>
             </div>
         </div>

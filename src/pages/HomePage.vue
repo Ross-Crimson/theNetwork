@@ -6,9 +6,11 @@ import { AppState } from '../AppState.js';
 import PostCard from '../components/PostCard.vue';
 import BonusCard from '../components/BonusCard.vue';
 import NewPostCard from '../components/NewPostCard.vue';
+import SearchBar from '../components/SearchBar.vue';
 
 const userPosts = computed(() => AppState.posts)
 const bonusContent = computed(() => AppState.bonuses)
+const searchTerm = computed(() => AppState.searchTerm)
 
 onMounted(() => getPosts())
 onMounted(() => getBonuses())
@@ -38,17 +40,33 @@ async function changeSearchPage(pageNum) {
     Pop.error(error);
   }
 }
+
+async function clearSearch() {
+  try {
+    await postsService.clearSearch()
+  }
+  catch (error) {
+    Pop.error(error);
+  }
+}
 </script>
 
 <template>
   <section class="container">
     <div class="row">
-      <div class="col-3">
+      <div class="col-2">
 
       </div>
 
-      <div class="col-6">
+      <div class="col-8">
         <div>
+          <SearchBar />
+
+          <div v-if="searchTerm" class="mt-3 d-flex align-items-center">
+            <button class="btn btn-warning " @click="clearSearch()">Clear Search</button>
+            <div class="text-break px-2 mx-2 text-info border border-dark rounded">{{ searchTerm }}</div>
+          </div>
+
           <NewPostCard />
         </div>
 
@@ -66,7 +84,7 @@ async function changeSearchPage(pageNum) {
         </div>
       </div>
 
-      <div class="col-3">
+      <div class="col-2">
         <BonusCard v-for="bonus in bonusContent" :key="bonus.title" :bonus="bonus" />
       </div>
     </div>

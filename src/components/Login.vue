@@ -2,15 +2,23 @@
 import { computed } from 'vue'
 import { AppState } from '../AppState'
 import { AuthService } from '../services/AuthService'
+import { postsService } from '../services/PostsService.js';
+import { useRoute } from 'vue-router';
+import Pop from '../utils/Pop.js';
+import App from '../App.vue';
 
 const user = computed(() => AppState.user)
 const account = computed(() => AppState.account)
+const activeProfile = computed(() => AppState.activeProfile)
+
 async function login() {
   AuthService.loginWithPopup()
 }
 async function logout() {
   AuthService.logout({ returnTo: window.location.origin })
 }
+
+
 
 </script>
 
@@ -30,6 +38,15 @@ async function logout() {
         </div>
         <div class="dropdown-menu dropdown-menu-sm-end dropdown-menu-start p-0" aria-labelledby="authDropdown">
           <div class="list-group">
+
+            <!-- <div >
+              <router-link :to="{ name: 'Profile', params: { profileId: account.id } }">
+                <div class="list-group-item dropdown-item list-group-item-action">
+                  Profile Page
+                </div>
+              </router-link>
+            </div> -->
+
             <router-link :to="{ name: 'Account' }">
               <div class="list-group-item dropdown-item list-group-item-action">
                 Manage Account
