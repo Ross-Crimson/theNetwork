@@ -39,13 +39,13 @@ async function logout() {
         <div class="dropdown-menu dropdown-menu-sm-end dropdown-menu-start p-0" aria-labelledby="authDropdown">
           <div class="list-group">
 
-            <!-- <div >
+            <div>
               <router-link :to="{ name: 'Profile', params: { profileId: account.id } }">
                 <div class="list-group-item dropdown-item list-group-item-action">
                   Profile Page
                 </div>
               </router-link>
-            </div> -->
+            </div>
 
             <router-link :to="{ name: 'Account' }">
               <div class="list-group-item dropdown-item list-group-item-action">

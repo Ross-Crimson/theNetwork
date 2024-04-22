@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { AppState } from '../AppState.js';
 import Pop from '../utils/Pop.js';
@@ -16,7 +16,7 @@ const posts = computed(() => AppState.posts)
 const bonusContent = computed(() => AppState.bonuses)
 const searchTerm = computed(() => AppState.searchTerm)
 
-onMounted(() => getProfileById())
+watch(route, () => getProfileById(), { immediate: true })
 //onMounted(() => getProfileBlogPosts())
 onMounted(() => getBonuses())
 
